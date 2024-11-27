@@ -9,7 +9,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Collection;
 
 public class Main {
     private static final String API_KEY = "a7b76e3c606d48effb4e257c3ff96b01";
@@ -23,13 +22,10 @@ public class Main {
         frame.setSize(400, 300);
         frame.setLayout(new BorderLayout());
 
-        JLabel label = new JLabel();
-        label.setBackground(Color.BLUE);
-        label.setForeground(Color.GREEN);
-        label.setOpaque(true);
-
         JTextField cityInput = new JTextField();
         frame.add(cityInput, BorderLayout.NORTH);
+        cityInput.setForeground(Color.GREEN);
+        cityInput.setBackground(Color.BLACK);
 
         JTextArea weatherOutput = new JTextArea();
         weatherOutput.setEditable(false);
@@ -43,7 +39,7 @@ public class Main {
             public void actionPerformed(ActionEvent e) {
                 String city = cityInput.getText().trim();
                 if (city.isEmpty()) {
-                    weatherOutput.setText("Пожалуйста, введите название города");
+                    weatherOutput.setText("Ошибка, введите название города");
                     return;
                 }
 
@@ -60,7 +56,6 @@ public class Main {
             }
         });
 
-        frame.add(label, BorderLayout.CENTER);
         frame.setVisible(true);
     }
 
