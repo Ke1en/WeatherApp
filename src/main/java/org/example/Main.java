@@ -15,7 +15,6 @@ public class Main {
     private static final String BASE_URL = "https://api.openweathermap.org/data/2.5/weather";
 
     public static void main(String[] args) {
-
         JFrame frame = new JFrame("Weatherify");
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -27,11 +26,13 @@ public class Main {
         cityInput.setForeground(Color.GREEN);
         cityInput.setBackground(Color.BLACK);
 
-        JTextArea weatherOutput = new JTextArea();
+        CustomTextArea weatherOutput = new CustomTextArea(new ImageIcon("Flower.png").getImage());
         weatherOutput.setEditable(false);
         frame.add(new JScrollPane(weatherOutput), BorderLayout.CENTER);
 
         JButton fetchWeatherButton = new JButton("Узнать погоду");
+        fetchWeatherButton.setBackground(Color.DARK_GRAY);
+        fetchWeatherButton.setForeground(Color.RED);
         frame.add(fetchWeatherButton, BorderLayout.SOUTH);
 
         fetchWeatherButton.addActionListener(new ActionListener() {
