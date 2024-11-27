@@ -25,6 +25,8 @@ public class Main {
 
         JLabel label = new JLabel();
         label.setBackground(Color.BLUE);
+        label.setForeground(Color.GREEN);
+        label.setOpaque(true);
 
         JTextField cityInput = new JTextField();
         frame.add(cityInput, BorderLayout.NORTH);
@@ -58,6 +60,7 @@ public class Main {
             }
         });
 
+        frame.add(label, BorderLayout.CENTER);
         frame.setVisible(true);
     }
 
