@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collection;
 
 public class Main {
     private static final String API_KEY = "a7b76e3c606d48effb4e257c3ff96b01";
@@ -22,6 +23,9 @@ public class Main {
         frame.setSize(400, 300);
         frame.setLayout(new BorderLayout());
 
+        JLabel label = new JLabel();
+        label.setBackground(Color.BLUE);
+
         JTextField cityInput = new JTextField();
         frame.add(cityInput, BorderLayout.NORTH);
 
@@ -30,7 +34,7 @@ public class Main {
         frame.add(new JScrollPane(weatherOutput), BorderLayout.CENTER);
 
         JButton fetchWeatherButton = new JButton("Узнать погоду");
-        frame.add(fetchWeatherButton, BorderLayout.EAST);
+        frame.add(fetchWeatherButton, BorderLayout.SOUTH);
 
         fetchWeatherButton.addActionListener(new ActionListener() {
             @Override
