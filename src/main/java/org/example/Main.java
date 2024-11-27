@@ -5,45 +5,76 @@ import okhttp3.OkHttpClient;
 import okhttp3.Response;
 import org.json.JSONObject;
 
-import java.util.Scanner;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Main {
     private static final String API_KEY = "a7b76e3c606d48effb4e257c3ff96b01";
     private static final String BASE_URL = "https://api.openweathermap.org/data/2.5/weather";
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Введите название города: \n");
-        String city = scanner.nextLine();
 
-        try {
-            String weatherData = getWeatherData(city);
-            if (weatherData != null) {
-                parseAndDisplayWeather(weatherData);
-            } else {
-                System.out.println("Не удалось получить данные о погоде");
+        JFrame frame = new JFrame("Weatherify");
+
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(400, 300);
+        frame.setLayout(new BorderLayout());
+
+        JTextField cityInput = new JTextField();
+        frame.add(cityInput, BorderLayout.NORTH);
+
+        JTextArea weatherOutput = new JTextArea();
+        weatherOutput.setEditable(false);
+        frame.add(new JScrollPane(weatherOutput), BorderLayout.CENTER);
+
+        JButton fetchWeatherButton = new JButton("Узнать погоду");
+        frame.add(fetchWeatherButton, BorderLayout.EAST);
+
+        fetchWeatherButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String city = cityInput.getText().trim();
+                if (city.isEmpty()) {
+                    weatherOutput.setText("Пожалуйста, введите название города");
+                    return;
+                }
+
+                try {
+                    String weatherData = getWeatherData(city);
+                    if (weatherData != null) {
+                        weatherOutput.setText(parseAndDisplayWeather(weatherData));
+                    } else {
+                        weatherOutput.setText("Не удалось получить данные. Проверьте название города");
+                    }
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
             }
-        } catch (Exception e) {
-            System.out.println("Error" + e.getMessage());
-        }
+        });
+
+        frame.setVisible(true);
     }
 
-    private static void parseAndDisplayWeather(String jsonData) {
-        JSONObject jsonObject = new JSONObject(jsonData);
-        String cityName = jsonObject.getString("name");
-        JSONObject main = jsonObject.getJSONObject("main");
-        double temperature = main.getDouble("temp");
-        double feelsLike = main.getDouble("feels_like");
-        int humidity = main.getInt("humidity");
+    private static String parseAndDisplayWeather(String jsonData) {
+        try {
+            JSONObject jsonObject = new JSONObject(jsonData);
+            String cityName = jsonObject.getString("name");
+            JSONObject main = jsonObject.getJSONObject("main");
+            double temperature = main.getDouble("temp");
+            double feelsLike = main.getDouble("feels_like");
+            int humidity = main.getInt("humidity");
 
-        JSONObject weather = jsonObject.getJSONArray("weather").getJSONObject(0);
-        String description = weather.getString("description");
+            JSONObject weather = jsonObject.getJSONArray("weather").getJSONObject(0);
+            String description = weather.getString("description");
 
-        System.out.println("\n Погода в городе " + cityName);
-        System.out.println("Температура " + temperature);
-        System.out.println("Ощущается как " + feelsLike);
-        System.out.println("Влажность " + humidity);
-        System.out.println("Описание" + description);
+            return "Город " + cityName + "\nТемпература " + temperature + "°C" + "\nВлажность " + humidity + "%" +
+                    "\nОщущается, как " + feelsLike + "°C" + "\nОписание " + description ;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Ошибка обработки данных";
+        }
     }
 
     private static String getWeatherData(String city) throws Exception {
